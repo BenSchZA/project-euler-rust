@@ -1,0 +1,1 @@
+/home/bscholtz/shells/rust.nix
