@@ -1,16 +1,16 @@
 fn main() {
     println!("Project Euler in Rust");
 
-    println!("Problem 1");
-    let result: u32 = problem_1();
-    println!("Result ~ {:?}", result);
+    let current_problem = 4;
+    let result = -1;
 
-    println!("Problem 2");
-    let result: u32 = problem_2();
-    println!("Result ~ {:?}", result);
-
-    println!("Problem 3");
-    let result: u64 = problem_3();
+    match current_problem {
+        1 => {let result: u32 = problem_1();}
+        2 => {let result: u32 = problem_2();}
+        3 => {let result: u64 = problem_3();}
+        4 => {let result: u64 = problem_4();}
+    }
+    println!("Problem {}", current_problem);
     println!("Result ~ {:?}", result);
 }
 
@@ -64,6 +64,37 @@ fn problem_3() -> u64 {
     }
 
     panic!("No prime factors");
+}
+
+fn problem_4() -> u64 {
+    let result = (100*100..999*999).filter(|&x| is_palindrome(number_to_vec(x))).collect::<Vec<_>>().sort().last();
+    return result;
+}
+
+fn is_palindrome(n: Vec<u64>) -> bool {
+    println!("{:?}", n);
+    if n.len() % 2 == 0 {
+        let half_len = n.len()/2;
+        let half_vec = n.chunks(half_len);
+        if half_vec[0] == half_vec[1] {
+            return true;
+        }
+    } else {
+        return false;
+    }
+    return false;
+}
+
+fn number_to_vec(n: u64) -> Vec<u64> {
+    let mut digits = Vec::new();
+    let mut n = n;
+    while n > 9 {
+        digits.push(n % 10);
+        n = n / 10;
+    }
+    digits.push(n);
+    digits.reverse();
+    return digits
 }
 
 fn is_prime(val: u64) -> bool {
