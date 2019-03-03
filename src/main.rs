@@ -9,6 +9,7 @@ fn main() {
         2 => {let result: u32 = problem_2();}
         3 => {let result: u64 = problem_3();}
         4 => {let result: u64 = problem_4();}
+        _ => {}
     }
     println!("Problem {}", current_problem);
     println!("Result ~ {:?}", result);
@@ -67,22 +68,16 @@ fn problem_3() -> u64 {
 }
 
 fn problem_4() -> u64 {
-    let result = (100*100..999*999).filter(|&x| is_palindrome(number_to_vec(x))).collect::<Vec<_>>().sort().last();
-    return result;
+    let range: Vec<_> = (100*100..999*999)
+        .collect::<Vec<_>>()
+        .iter().cloned()
+        .filter(|&x| is_palindrome(number_to_vec(x)) && check_factors_three_digits(x))
+        .collect::<Vec<_>>();
+    return *range.last().unwrap();
 }
 
-fn is_palindrome(n: Vec<u64>) -> bool {
-    println!("{:?}", n);
-    if n.len() % 2 == 0 {
-        let half_len = n.len()/2;
-        let half_vec = n.chunks(half_len);
-        if half_vec[0] == half_vec[1] {
-            return true;
-        }
-    } else {
-        return false;
-    }
-    return false;
+fn is_palindrome(v: Vec<u64>) -> bool {
+    v.iter().eq(v.iter().rev())
 }
 
 fn number_to_vec(n: u64) -> Vec<u64> {
@@ -117,4 +112,18 @@ fn is_prime(val: u64) -> bool {
             return true
         }
     }
+}
+
+fn check_factors_three_digits(val: u64) -> bool {
+    const MIN_FAC: u64 = 100;
+    const MAX_FAC: u64 = 999;
+
+    for x in MIN_FAC..=MAX_FAC {
+        for y in MIN_FAC..=MAX_FAC {
+            if x*y == val {
+                return true
+            }
+        }
+    }
+    return false
 }
